@@ -14,7 +14,7 @@
         android:id="@+id/tvInfoTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Справка (cth)"
+        android:text="@string/info_title"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="@color/white"
@@ -37,7 +37,7 @@
             android:id="@+id/tvInfoText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Функция: cth(x) = cosh(x) / sinh(x)\n\nПроверки:\n• Если x <= 0 и не включён |x| — выводится сообщение о недопустимости ввода данных.\n• Если sinh(x)=0 (x≈0) — выводится сообщение о недопустимости операции (деление на 0).\n• Формат вывода настраивается радиокнопками на главном экране.\n\nНавигация и жесты:\n• Нижняя панель: расчёт — история — справка.\n• Горизонтальный свайп переключает вкладки.\n• В истории два свайпа вниз подряд очищают список (сначала предупреждение, затем удаление)."
+            android:text="@string/info_text"
             android:textSize="15sp"
             android:textColor="@color/white" />
     </ScrollView>

@@ -40,9 +40,6 @@ public class HistoryActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavHistory);
         NavHelper.setupBottomNav(this, bottomNav, NavHelper.TAB_HISTORY);
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottomNavHistory);
-        NavHelper.setupBottomNav(this, bottomNav, NavHelper.TAB_HISTORY);
-
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             private static final int SWIPE_DIST = 140;
             private static final int SWIPE_VEL = 140;
