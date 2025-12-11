@@ -38,8 +38,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/info_text"
+            android:layout_marginHorizontal="4dp"
+            android:padding="12dp"
+            android:background="@drawable/bg_glass_card"
+            android:lineSpacingExtra="4dp"
             android:textSize="15sp"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:alpha="0.92" />
     </ScrollView>
 
     <Button

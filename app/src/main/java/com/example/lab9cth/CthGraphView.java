@@ -28,17 +28,26 @@ public class CthGraphView extends View {
     public CthGraphView(Context c, @Nullable AttributeSet a) { super(c, a); init(); }
 
     private void init() {
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
+
         axisPaint.setStrokeWidth(3f);
         axisPaint.setStyle(Paint.Style.STROKE);
+        axisPaint.setColor(0xDDFFFFFF);
 
-        gridPaint.setStrokeWidth(1f);
+        gridPaint.setStrokeWidth(1.2f);
         gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setAlpha(60);
+        gridPaint.setColor(0x66FFFFFF);
 
-        linePaint.setStrokeWidth(4f);
+        linePaint.setStrokeWidth(5f);
         linePaint.setStyle(Paint.Style.STROKE);
+        linePaint.setColor(0xFF4BD7EC);
+        linePaint.setStrokeCap(Paint.Cap.ROUND);
+        linePaint.setStrokeJoin(Paint.Join.ROUND);
+        linePaint.setShadowLayer(14f, 0, 0, 0x8824C0E8);
 
         pointPaint.setStyle(Paint.Style.FILL);
+        pointPaint.setColor(0xFFFFFFFF);
+        pointPaint.setShadowLayer(18f, 0, 4f, 0xAA4BD7EC);
     }
 
     public void plotCth(double minX, double maxX, double highlightX) {

@@ -5,6 +5,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.DecimalFormat;
+
 public class GraphActivity extends AppCompatActivity {
 
     @Override
@@ -17,13 +19,16 @@ public class GraphActivity extends AppCompatActivity {
         CthGraphView graph = findViewById(R.id.graph);
         TextView tv = findViewById(R.id.tvPoint);
 
+        DecimalFormat fmt = new DecimalFormat("0.###");
+        DecimalFormat fmtLong = new DecimalFormat("0.######");
+
         double y;
         double sh = Math.sinh(x);
         if (Math.abs(sh) < 1e-8) {
             tv.setText("x ≈ 0 → деление на 0 (cth не определена)");
         } else {
             y = Math.cosh(x) / sh;
-            tv.setText("x = " + x + "   cth(x) = " + y);
+            tv.setText("x = " + fmt.format(x) + "   cth(x) = " + fmtLong.format(y));
         }
 
         graph.plotCth(-3, 3, x); // диапазон можно поменять

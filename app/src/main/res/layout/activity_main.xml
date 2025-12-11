@@ -53,12 +53,34 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <TextView
+                    android:id="@+id/heroTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="cth(x)"
+                    android:textColor="@color/white"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/heroSubtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Гиперболический котангенс с быстрыми проверками"
+                    android:textColor="@color/white"
+                    android:alpha="0.82"
+                    android:textSize="14sp" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilX"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Введите x">
+                    android:layout_marginTop="16dp"
+                    android:hint="Введите x"
+                    app:startIconDrawable="@android:drawable/ic_input_add"
+                    app:startIconTint="@color/accentCyan">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etX"
@@ -72,82 +94,98 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/bg_glass_card"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="12dp">
 
                     <CheckBox
                         android:id="@+id/cbAbs"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="|x| для отрицательных"
+                        android:layout_weight="1"
+                        android:text="Использовать |x|"
                         android:buttonTint="@color/accentCyan"
                         android:textColor="@color/white" />
 
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                    <RadioGroup
-                        android:id="@+id/rgPrecision"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <RadioButton
-                            android:id="@+id/rb3"
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:checked="true"
-                            android:buttonTint="@color/accentCyan"
-                            android:text="3"
-                            android:textColor="@color/white" />
+                            android:layout_marginBottom="2dp"
+                            android:text="Точность"
+                            android:textColor="@color/white"
+                            android:textSize="12sp" />
 
-                        <RadioButton
-                            android:id="@+id/rb6"
+                        <RadioGroup
+                            android:id="@+id/rgPrecision"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:buttonTint="@color/accentCyan"
-                            android:text="6"
-                            android:textColor="@color/white" />
-                </RadioGroup>
-            </LinearLayout>
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rb3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:checked="true"
+                                android:buttonTint="@color/accentCyan"
+                                android:text="3"
+                                android:textColor="@color/white" />
+
+                            <RadioButton
+                                android:id="@+id/rb6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:buttonTint="@color/accentCyan"
+                                android:text="6"
+                                android:textColor="@color/white" />
+                        </RadioGroup>
+                    </LinearLayout>
+                </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnCalc"
                     style="@style/Widget.Material3.Button.TonalButton"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="16dp"
-                    android:text="Вычислить" />
+                    android:layout_marginTop="18dp"
+                    android:text="Вычислить"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/tvResult"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:alpha="0.85"
+                    android:layout_marginTop="14dp"
+                    android:alpha="0.9"
+                    android:padding="12dp"
+                    android:background="@drawable/bg_glass_card"
                     android:text="Результат появится здесь"
                     android:textColor="@color/white"
-                    android:textSize="16sp" />
+                    android:textSize="17sp" />
 
                 <!-- Actions (появятся после расчёта в коде, но id уже есть) -->
                 <LinearLayout
                     android:id="@+id/actionsRow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="14dp"
-                    android:gravity="end"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="16dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnInfo"
                         style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:minHeight="40dp"
+                        android:layout_weight="1"
+                        android:minHeight="48dp"
                         android:text="Справка" />
 
                     <Space
@@ -157,9 +195,10 @@
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnGraph"
                         style="@style/Widget.Material3.Button.TonalButton"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:minHeight="40dp"
+                        android:layout_weight="1"
+                        android:minHeight="48dp"
                         android:text="График" />
                 </LinearLayout>
 
