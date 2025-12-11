@@ -6,6 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_rich_gradient"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
@@ -30,8 +31,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
-        android:padding="16dp"
-        android:paddingBottom="88dp"
+        android:padding="18dp"
+        android:paddingBottom="96dp"
         android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -39,8 +40,12 @@
             android:id="@+id/cardMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="20dp"
-            app:cardUseCompatPadding="true">
+            app:cardBackgroundColor="@color/cardGlass"
+            app:cardCornerRadius="22dp"
+            app:cardElevation="12dp"
+            app:cardUseCompatPadding="true"
+            app:strokeColor="@color/cardStroke"
+            app:strokeWidth="1dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -75,7 +80,9 @@
                         android:id="@+id/cbAbs"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="|x| для отрицательных" />
+                        android:text="|x| для отрицательных"
+                        android:buttonTint="@color/accentCyan"
+                        android:textColor="@color/white" />
 
                     <Space
                         android:layout_width="0dp"
@@ -93,15 +100,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="true"
-                            android:text="3" />
+                            android:buttonTint="@color/accentCyan"
+                            android:text="3"
+                            android:textColor="@color/white" />
 
                         <RadioButton
                             android:id="@+id/rb6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="6" />
-                    </RadioGroup>
-                </LinearLayout>
+                            android:buttonTint="@color/accentCyan"
+                            android:text="6"
+                            android:textColor="@color/white" />
+                </RadioGroup>
+            </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnCalc"
@@ -119,6 +130,7 @@
                     android:layout_marginTop="16dp"
                     android:alpha="0.85"
                     android:text="Результат появится здесь"
+                    android:textColor="@color/white"
                     android:textSize="16sp" />
 
                 <!-- Actions (появятся после расчёта в коде, но id уже есть) -->

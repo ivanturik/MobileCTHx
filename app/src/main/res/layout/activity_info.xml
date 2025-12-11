@@ -4,6 +4,7 @@
     android:id="@+id/infoRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_rich_gradient"
     android:padding="16dp"
     android:clickable="true"
     android:focusable="true"
@@ -13,9 +14,10 @@
         android:id="@+id/tvInfoTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Справка (cth)"
+        android:text="@string/info_title"
         android:textSize="22sp"
         android:textStyle="bold"
+        android:textColor="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -35,8 +37,9 @@
             android:id="@+id/tvInfoText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Функция: cth(x) = cosh(x) / sinh(x)\n\nПроверки:\n• Если x &lt;= 0 и не включён |x| — выводится сообщение о недопустимости ввода данных.\n• Если sinh(x)=0 (x≈0) — выводится сообщение о недопустимости операции (деление на 0).\n\nЖест: горизонтальный свайп — назад."
-            android:textSize="15sp" />
+            android:text="@string/info_text"
+            android:textSize="15sp"
+            android:textColor="@color/white" />
     </ScrollView>
 
     <Button
@@ -44,8 +47,23 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Назад"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textAllCaps="false"
+        android:background="@drawable/bg_glass_card"
+        android:textColor="@color/white"
+        android:padding="12dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavInfo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="?attr/colorSurface"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
