@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 public class HistoryActivity extends AppCompatActivity {
@@ -27,10 +28,15 @@ public class HistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
+        HistoryStore.init(this);
+
         rv = findViewById(R.id.rvHistory);
         rv.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new HistoryAdapter(HistoryStore.getAll());
+        adapter = new HistoryAdapter(HistoryStore.getAll(this));
         rv.setAdapter(adapter);
+
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavHistory);
+        NavHelper.setupBottomNav(this, bottomNav, NavHelper.TAB_HISTORY);
 
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
             private static final int SWIPE_DIST = 140;
@@ -38,18 +44,15 @@ public class HistoryActivity extends AppCompatActivity {
 
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                if (e1 == null || e2 == null) return false;
-
-                float dx = e2.getX() - e1.getX();
-                float dy = e2.getY() - e1.getY();
-
-                // Горизонтальный
-                if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > SWIPE_DIST && Math.abs(velocityX) > SWIPE_VEL) {
-                    if (dx > 0) {
-                        finish(); // вправо -> назад
-                    }
+                if (NavHelper.tryHandleHorizontalSwipe(HistoryActivity.this,
+                        NavHelper.TAB_HISTORY, e1, e2, velocityX, velocityY)) {
                     return true;
                 }
+
+                if (e1 == null || e2 == null) return false;
+
+                float dy = e2.getY() - e1.getY();
+                float dx = e2.getX() - e1.getX();
 
                 // Вертикальный вниз (двойной)
                 if (Math.abs(dy) > Math.abs(dx) && dy > SWIPE_DIST && Math.abs(velocityY) > SWIPE_VEL) {
@@ -66,7 +69,7 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // обновить историю, если вернулись с Main
-        adapter.setItems(HistoryStore.getAll());
+        adapter.setItems(HistoryStore.getAll(this));
     }
 
     @Override
@@ -90,8 +93,8 @@ public class HistoryActivity extends AppCompatActivity {
             handler.postDelayed(() -> clearArmed = false, 1800);
         } else {
             clearArmed = false;
-            HistoryStore.clear();
-            adapter.setItems(HistoryStore.getAll());
+            HistoryStore.clear(this);
+            adapter.setItems(HistoryStore.getAll(this));
 
             Snackbar sb = Snackbar.make(root, "История очищена", Snackbar.LENGTH_SHORT);
             sb.show();

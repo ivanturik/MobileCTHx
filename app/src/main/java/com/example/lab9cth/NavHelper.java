@@ -14,6 +14,9 @@ public final class NavHelper {
     public static final int TAB_HISTORY = 1;
     public static final int TAB_INFO = 2;
 
+    private static final int SWIPE_THRESHOLD = 120;
+    private static final int SWIPE_VELOCITY_THRESHOLD = 120;
+
     private NavHelper() {}
 
     public static void setupBottomNav(AppCompatActivity a, BottomNavigationView nav, int currentTab) {
@@ -30,31 +33,37 @@ public final class NavHelper {
 
     public static void attachSwipeTabs(AppCompatActivity a, View touchArea, int currentTab) {
         GestureDetector gd = new GestureDetector(a, new GestureDetector.SimpleOnGestureListener() {
-            private static final int SWIPE_THRESHOLD = 120;
-            private static final int SWIPE_VELOCITY_THRESHOLD = 120;
-
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                if (e1 == null || e2 == null) return false;
-
-                float dx = e2.getX() - e1.getX();
-                float dy = e2.getY() - e1.getY();
-
-                if (Math.abs(dx) > Math.abs(dy)
-                        && Math.abs(dx) > SWIPE_THRESHOLD
-                        && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-
-                    int targetTab = currentTab + (dx < 0 ? 1 : -1);
-                    if (targetTab < TAB_CALC || targetTab > TAB_INFO) return false;
-
-                    openTab(a, currentTab, targetTab);
-                    return true;
-                }
-                return false;
+                return tryHandleHorizontalSwipe(a, currentTab, e1, e2, velocityX, velocityY);
             }
         });
 
         touchArea.setOnTouchListener((v, event) -> gd.onTouchEvent(event));
+    }
+
+    public static boolean tryHandleHorizontalSwipe(AppCompatActivity a,
+                                                   int currentTab,
+                                                   MotionEvent e1,
+                                                   MotionEvent e2,
+                                                   float velocityX,
+                                                   float velocityY) {
+        if (e1 == null || e2 == null) return false;
+
+        float dx = e2.getX() - e1.getX();
+        float dy = e2.getY() - e1.getY();
+
+        if (Math.abs(dx) > Math.abs(dy)
+                && Math.abs(dx) > SWIPE_THRESHOLD
+                && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+
+            int targetTab = currentTab + (dx < 0 ? 1 : -1);
+            if (targetTab < TAB_CALC || targetTab > TAB_INFO) return false;
+
+            openTab(a, currentTab, targetTab);
+            return true;
+        }
+        return false;
     }
 
     private static void openTab(AppCompatActivity a, int fromTab, int toTab) {
