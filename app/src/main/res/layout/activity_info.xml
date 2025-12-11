@@ -35,7 +35,7 @@
             android:id="@+id/tvInfoText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Функция: cth(x) = cosh(x) / sinh(x)\n\nПроверки:\n• Если x &lt;= 0 и не включён |x| — выводится сообщение о недопустимости ввода данных.\n• Если sinh(x)=0 (x≈0) — выводится сообщение о недопустимости операции (деление на 0).\n\nЖест: горизонтальный свайп — назад."
+            android:text="Функция: cth(x) = cosh(x) / sinh(x)\n\nПроверки:\n• Если x &lt;= 0 и не включён |x| — выводится сообщение о недопустимости ввода данных.\n• Если sinh(x)=0 (x≈0) — выводится сообщение о недопустимости операции (деление на 0).\n• Формат вывода настраивается радиокнопками на главном экране.\n\nНавигация и жесты:\n• Нижняя панель: расчёт — история — справка.\n• Горизонтальный свайп переключает вкладки.\n• В истории два свайпа вниз подряд очищают список (сначала предупреждение, затем удаление)."
             android:textSize="15sp" />
     </ScrollView>
 
@@ -44,8 +44,19 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Назад"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavInfo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavInfo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="?attr/colorSurface"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
