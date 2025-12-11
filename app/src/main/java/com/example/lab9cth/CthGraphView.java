@@ -28,17 +28,26 @@ public class CthGraphView extends View {
     public CthGraphView(Context c, @Nullable AttributeSet a) { super(c, a); init(); }
 
     private void init() {
+        setLayerType(LAYER_TYPE_SOFTWARE, null);
+
         axisPaint.setStrokeWidth(3f);
         axisPaint.setStyle(Paint.Style.STROKE);
+        axisPaint.setColor(0xDDFFFFFF);
 
-        gridPaint.setStrokeWidth(1f);
+        gridPaint.setStrokeWidth(1.2f);
         gridPaint.setStyle(Paint.Style.STROKE);
-        gridPaint.setAlpha(60);
+        gridPaint.setColor(0x66FFFFFF);
 
-        linePaint.setStrokeWidth(4f);
+        linePaint.setStrokeWidth(5f);
         linePaint.setStyle(Paint.Style.STROKE);
+        linePaint.setColor(0xFF4BD7EC);
+        linePaint.setStrokeCap(Paint.Cap.ROUND);
+        linePaint.setStrokeJoin(Paint.Join.ROUND);
+        linePaint.setShadowLayer(14f, 0, 0, 0x8824C0E8);
 
         pointPaint.setStyle(Paint.Style.FILL);
+        pointPaint.setColor(0xFFFFFFFF);
+        pointPaint.setShadowLayer(18f, 0, 4f, 0xAA4BD7EC);
     }
 
     public void plotCth(double minX, double maxX, double highlightX) {
@@ -54,12 +63,19 @@ public class CthGraphView extends View {
             double x = minX + i * step;
 
             double sh = Math.sinh(x);
-            if (Math.abs(sh) < 1e-4) continue; // разрыв возле 0
+            if (Math.abs(sh) < 1e-4) { // разрыв возле 0
+                xs.add(Double.NaN);
+                ys.add(Double.NaN);
+                continue;
+            }
 
             double y = Math.cosh(x) / sh;
 
-            if (!Double.isFinite(y)) continue;
-            if (Math.abs(y) > 10) continue; // чтоб не улетало
+            if (!Double.isFinite(y) || Math.abs(y) > 10) { // защитное ограничение
+                xs.add(Double.NaN);
+                ys.add(Double.NaN);
+                continue;
+            }
 
             xs.add(x);
             ys.add(y);
@@ -83,14 +99,17 @@ public class CthGraphView extends View {
 
         if (xs.isEmpty()) return;
 
-        double minX = xs.get(0), maxX = xs.get(0);
-        double minY = ys.get(0), maxY = ys.get(0);
-        for (int i = 1; i < xs.size(); i++) {
-            minX = Math.min(minX, xs.get(i));
-            maxX = Math.max(maxX, xs.get(i));
-            minY = Math.min(minY, ys.get(i));
-            maxY = Math.max(maxY, ys.get(i));
+        double minX = Double.POSITIVE_INFINITY, maxX = Double.NEGATIVE_INFINITY;
+        double minY = Double.POSITIVE_INFINITY, maxY = Double.NEGATIVE_INFINITY;
+        for (int i = 0; i < xs.size(); i++) {
+            double x = xs.get(i);
+            double y = ys.get(i);
+            if (!Double.isFinite(x) || !Double.isFinite(y)) continue;
+            minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+            minY = Math.min(minY, y); maxY = Math.max(maxY, y);
         }
+
+        if (!Double.isFinite(minX) || !Double.isFinite(minY)) return;
 
         double yPad = (maxY - minY) * 0.1;
         if (yPad == 0) yPad = 1;
@@ -108,8 +127,15 @@ public class CthGraphView extends View {
         Path path = new Path();
         boolean started = false;
         for (int i = 0; i < xs.size(); i++) {
-            float x = mapX(xs.get(i), w, pad, minX, maxX);
-            float y = mapY(ys.get(i), h, pad, minY, maxY);
+            double xVal = xs.get(i);
+            double yVal = ys.get(i);
+            if (!Double.isFinite(xVal) || !Double.isFinite(yVal)) {
+                started = false; // обрываем кривую в точке разрыва
+                continue;
+            }
+
+            float x = mapX(xVal, w, pad, minX, maxX);
+            float y = mapY(yVal, h, pad, minY, maxY);
             if (!started) { path.moveTo(x, y); started = true; }
             else path.lineTo(x, y);
         }

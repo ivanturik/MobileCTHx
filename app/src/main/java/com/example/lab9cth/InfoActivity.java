@@ -12,6 +12,8 @@ import androidx.core.view.GestureDetectorCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class InfoActivity extends AppCompatActivity {
 
     private GestureDetectorCompat gestureDetector;
@@ -34,19 +36,14 @@ public class InfoActivity extends AppCompatActivity {
         Button btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
 
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavInfo);
+        NavHelper.setupBottomNav(this, bottomNav, NavHelper.TAB_INFO);
+
         gestureDetector = new GestureDetectorCompat(this, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                if (e1 == null || e2 == null) return false;
-
-                float diffX = e2.getX() - e1.getX();
-                if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                    // любой сильный горизонтальный свайп — назад
-                    finish();
-                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-                    return true;
-                }
-                return false;
+                return NavHelper.tryHandleHorizontalSwipe(InfoActivity.this,
+                        NavHelper.TAB_INFO, e1, e2, velocityX, velocityY);
             }
         });
     }

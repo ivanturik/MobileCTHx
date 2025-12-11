@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="accentBlue">#4BA3FF</color>
+    <color name="accentCyan">#4BD7EC</color>
+    <color name="deepSpace">#0F172A</color>
+    <color name="cardGlass">#CC121827</color>
+    <color name="cardStroke">#55FFFFFF</color>
 </resources>
