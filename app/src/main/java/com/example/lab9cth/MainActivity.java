@@ -6,12 +6,17 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.view.animation.OvershootInterpolator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.Locale;
 
@@ -23,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvResult;
     private MaterialButton btnCalc, btnInfo, btnGraph;
     private MaterialCheckBox cbAbs;
+    private RadioGroup rgPrecision;
 
     private double lastX = Double.NaN; // для графика
 
@@ -31,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        HistoryStore.init(this);
+
         // IDs должны совпадать с твоим activity_main.xml
         etX = findViewById(R.id.etX);
         tvResult = findViewById(R.id.tvResult);
@@ -38,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
         btnInfo = findViewById(R.id.btnInfo);
         btnGraph = findViewById(R.id.btnGraph);
         cbAbs = findViewById(R.id.cbAbs);
+        rgPrecision = findViewById(R.id.rgPrecision);
+
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNav);
+        NavHelper.setupBottomNav(this, bottomNav, NavHelper.TAB_CALC);
 
         btnGraph.setVisibility(View.GONE);
 
@@ -52,27 +64,24 @@ public class MainActivity extends AppCompatActivity {
         });
 
         gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-            private static final int SWIPE_DIST = 140;
-            private static final int SWIPE_VEL = 140;
-
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                if (e1 == null || e2 == null) return false;
-
-                float dx = e2.getX() - e1.getX();
-                float dy = e2.getY() - e1.getY();
-
-                // Только горизонтальный свайп
-                if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > SWIPE_DIST && Math.abs(velocityX) > SWIPE_VEL) {
-                    if (dx < 0) {
-                        // влево -> история
-                        startActivity(new Intent(MainActivity.this, HistoryActivity.class));
-                    }
-                    return true;
-                }
-                return false;
+                return NavHelper.tryHandleHorizontalSwipe(MainActivity.this,
+                        NavHelper.TAB_CALC, e1, e2, velocityX, velocityY);
             }
         });
+
+        MaterialCardView card = findViewById(R.id.cardMain);
+        card.setScaleX(0.96f);
+        card.setScaleY(0.96f);
+        card.setAlpha(0f);
+        card.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .alpha(1f)
+                .setInterpolator(new OvershootInterpolator(0.82f))
+                .setDuration(420)
+                .start();
     }
 
     @Override
@@ -121,9 +130,27 @@ public class MainActivity extends AppCompatActivity {
         lastX = xForCalc;
         btnGraph.setVisibility(View.VISIBLE);
 
-        String res = String.format(Locale.US, "cth(%.6f) = %.6f", xForCalc, y);
+        int precision = getPrecision();
+        String fmt = "cth(% ." + precision + "f) = % ." + precision + "f";
+        String res = String.format(Locale.US, fmt, xForCalc, y);
         tvResult.setText(res);
 
-        HistoryStore.add(res);
+        tvResult.setTranslationY(10f);
+        tvResult.setAlpha(0f);
+        tvResult.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(260)
+                .start();
+
+        HistoryStore.add(this, res);
+    }
+
+    private int getPrecision() {
+        if (rgPrecision == null) return 6;
+        int id = rgPrecision.getCheckedRadioButtonId();
+        RadioButton rb = findViewById(id);
+        if (rb != null && "3".contentEquals(rb.getText())) return 3;
+        return 6;
     }
 }

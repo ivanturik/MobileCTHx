@@ -1,8 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Lab9Cth" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/accentBlue</item>
+        <item name="colorSecondary">@color/accentCyan</item>
+        <item name="colorSurface">@color/cardGlass</item>
+        <item name="colorOnSurface">@color/white</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/deepSpace</item>
+        <item name="android:navigationBarColor" tools:targetApi="l">@color/deepSpace</item>
     </style>
 
     <style name="Theme.Lab9Cth" parent="Base.Theme.Lab9Cth" />
