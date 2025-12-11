@@ -3,6 +3,7 @@ package com.example.lab9cth;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -29,13 +30,24 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.VH> {
     @Override
     public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(android.R.layout.simple_list_item_1, parent, false);
+                .inflate(R.layout.item_history, parent, false);
         return new VH(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull VH holder, int position) {
-        holder.t.setText(data.get(position));
+        holder.label.setText("Запись " + (position + 1));
+        holder.value.setText(data.get(position));
+
+        holder.itemView.setAlpha(0f);
+        holder.itemView.setTranslationY(24f);
+        holder.itemView.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(240)
+                .setStartDelay(Math.min(position * 18L, 120))
+                .setInterpolator(new DecelerateInterpolator())
+                .start();
     }
 
     @Override
@@ -44,10 +56,12 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.VH> {
     }
 
     static class VH extends RecyclerView.ViewHolder {
-        TextView t;
+        final TextView label;
+        final TextView value;
         VH(@NonNull View itemView) {
             super(itemView);
-            t = itemView.findViewById(android.R.id.text1);
+            label = itemView.findViewById(R.id.tvHistoryLabel);
+            value = itemView.findViewById(R.id.tvHistoryValue);
         }
     }
 }
