@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,6 +35,10 @@ public class HistoryActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
         adapter = new HistoryAdapter(HistoryStore.getAll(this));
         rv.setAdapter(adapter);
+        rv.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(this, R.anim.layout_fall_down));
+
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavHistory);
+        NavHelper.setupBottomNav(this, bottomNav, NavHelper.TAB_HISTORY);
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavHistory);
         NavHelper.setupBottomNav(this, bottomNav, NavHelper.TAB_HISTORY);
@@ -70,6 +75,7 @@ public class HistoryActivity extends AppCompatActivity {
         super.onResume();
         // обновить историю, если вернулись с Main
         adapter.setItems(HistoryStore.getAll(this));
+        rv.scheduleLayoutAnimation();
     }
 
     @Override
@@ -95,6 +101,7 @@ public class HistoryActivity extends AppCompatActivity {
             clearArmed = false;
             HistoryStore.clear(this);
             adapter.setItems(HistoryStore.getAll(this));
+            rv.scheduleLayoutAnimation();
 
             Snackbar sb = Snackbar.make(root, "История очищена", Snackbar.LENGTH_SHORT);
             sb.show();
