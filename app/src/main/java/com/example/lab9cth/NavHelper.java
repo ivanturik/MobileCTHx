@@ -6,8 +6,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityOptionsCompat;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public final class NavHelper {
@@ -77,8 +75,8 @@ public final class NavHelper {
         int exitAnim = toTab > fromTab ? R.anim.slide_out_left : R.anim.slide_out_right;
 
         Intent intent = new Intent(a, cls);
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeCustomAnimation(a, enterAnim, exitAnim);
-        a.startActivity(intent, options.toBundle());
+        a.startActivity(intent);
+        a.overridePendingTransition(enterAnim, exitAnim);
         a.finish(); // чтобы не плодить стек из 100 экранов
     }
 
