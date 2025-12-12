@@ -1,8 +1,6 @@
 package com.example.lab9cth;
 
 import android.os.Bundle;
-import android.widget.Button;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -24,9 +22,6 @@ public class InfoActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
             return insets;
         });
-
-        Button btnBack = findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(v -> finish());
 
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavInfo);
         NavHelper.setupBottomNav(this, bottomNav, NavHelper.TAB_INFO);

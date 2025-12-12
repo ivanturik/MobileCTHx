@@ -143,7 +143,7 @@ public final class NavHelper {
                 dragging = false;
                 tracker = VelocityTracker.obtain();
                 tracker.addMovement(event);
-                return false;
+                return true;
             }
 
             if (tracker != null) tracker.addMovement(event);
