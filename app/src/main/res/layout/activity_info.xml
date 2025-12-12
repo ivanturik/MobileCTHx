@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_rich_gradient"
-    android:padding="16dp"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true">
@@ -14,6 +13,9 @@
         android:id="@+id/tvInfoTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
         android:text="@string/info_title"
         android:textSize="22sp"
         android:textStyle="bold"
@@ -28,8 +30,9 @@
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="12dp"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintTop_toBottomOf="@id/tvInfoTitle"
-        app:layout_constraintBottom_toTopOf="@id/btnBack"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavInfo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -47,24 +50,12 @@
             android:alpha="0.92" />
     </ScrollView>
 
-    <Button
-        android:id="@+id/btnBack"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Назад"
-        android:textAllCaps="false"
-        android:background="@drawable/bg_glass_card"
-        android:textColor="@color/white"
-        android:padding="12dp"
-        app:layout_constraintBottom_toTopOf="@id/bottomNavInfo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavInfo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="0dp"
         android:background="?attr/colorSurface"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

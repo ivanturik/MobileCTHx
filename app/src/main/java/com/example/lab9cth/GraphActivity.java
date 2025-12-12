@@ -31,6 +31,7 @@ public class GraphActivity extends AppCompatActivity {
             tv.setText("x = " + fmt.format(x) + "   cth(x) = " + fmtLong.format(y));
         }
 
-        graph.plotCth(-3, 3, x); // диапазон можно поменять
+        double span = Math.max(3.0, Math.abs(x) + 1.5);
+        graph.plotCth(-span, span, x);
     }
 }
