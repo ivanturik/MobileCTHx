@@ -6,6 +6,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.animation.DecelerateInterpolator;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -155,8 +156,10 @@ public final class NavHelper {
                     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > touchSlop) {
                         if (canMove(dx)) {
                             dragging = true;
-                            View parent = target.getParent() instanceof View ? (View) target.getParent() : target;
-                            parent.requestDisallowInterceptTouchEvent(true);
+                            ViewParent parent = target.getParent();
+                            if (parent != null) {
+                                parent.requestDisallowInterceptTouchEvent(true);
+                            }
                         }
                     }
                 }
