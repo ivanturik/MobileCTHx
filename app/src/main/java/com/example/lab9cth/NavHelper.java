@@ -137,6 +137,7 @@ public final class NavHelper {
                     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > touchSlop) {
                         if (canMove(dx)) {
                             dragging = true;
+                            target.getParent().requestDisallowInterceptTouchEvent(true);
                         }
                     }
                 }

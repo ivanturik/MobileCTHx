@@ -101,17 +101,10 @@ public class MainActivity extends AppCompatActivity {
         boolean useAbs = cbAbs != null && cbAbs.isChecked();
         double xForCalc = useAbs ? Math.abs(x) : x;
 
-        // Условие из задания: 0 и отрицательные — недопустимы (если не предусмотрено)
-        if (!useAbs && xForCalc <= 0) {
-            tvResult.setText("Недопустимый ввод данных: x должен быть > 0 (или включите модуль)");
-            btnGraph.setVisibility(View.GONE);
-            return;
-        }
-
         // cth(x)=cosh(x)/sinh(x), деление на 0 при sinh(x)=0 (вблизи 0)
         double sh = Math.sinh(xForCalc);
         if (Math.abs(sh) < 1e-8) {
-            tvResult.setText("Недопустимая операция: деление на 0");
+            tvResult.setText("Недопустимая операция: деление на 0 (x не должен быть 0)");
             btnGraph.setVisibility(View.GONE);
             return;
         }

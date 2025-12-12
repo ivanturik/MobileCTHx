@@ -88,8 +88,8 @@
                         android:id="@+id/etX"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        android:digits="0123456789.,"
+                        android:inputType="numberDecimal|numberSigned"
+                        android:digits="-0123456789.,"
                         android:maxLines="1"
                         android:imeOptions="actionDone" />
                 </com.google.android.material.textfield.TextInputLayout>
