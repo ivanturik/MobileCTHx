@@ -5,6 +5,7 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,8 +16,8 @@ public final class NavHelper {
     public static final int TAB_HISTORY = 1;
     public static final int TAB_INFO = 2;
 
-    private static final int SWIPE_THRESHOLD = 120;
-    private static final int SWIPE_VELOCITY_THRESHOLD = 120;
+    private static final int SWIPE_THRESHOLD = 80;
+    private static final int SWIPE_VELOCITY_THRESHOLD = 80;
 
     private NavHelper() {}
 
@@ -33,7 +34,20 @@ public final class NavHelper {
     }
 
     public static void attachSwipeTabs(AppCompatActivity a, View touchArea, int currentTab) {
-        new SwipeController(a, touchArea, currentTab);
+        View root = touchArea;
+        if (root == null) {
+            View content = a.findViewById(android.R.id.content);
+            if (content instanceof ViewGroup) {
+                root = ((ViewGroup) content).getChildAt(0);
+            } else {
+                root = content;
+            }
+        }
+
+        if (root != null) {
+            root.setClickable(true);
+            new SwipeController(a, root, currentTab);
+        }
     }
 
     public static boolean tryHandleHorizontalSwipe(AppCompatActivity a,
@@ -145,7 +159,7 @@ public final class NavHelper {
                 if (dragging) {
                     dx = clampDirection(dx);
                     lastDx = dx;
-                    float translated = dx * 0.75f;
+                    float translated = dx * 0.9f;
                     float progress = Math.min(1f, Math.abs(translated) / Math.max(1, target.getWidth()));
 
                     target.setTranslationX(translated);
@@ -166,7 +180,7 @@ public final class NavHelper {
 
                 if (dragging) {
                     boolean fast = Math.abs(velocityX) > minFlingVelocity * 1.5f;
-                    boolean farEnough = Math.abs(lastDx) > target.getWidth() * 0.28f;
+                    boolean farEnough = Math.abs(lastDx) > target.getWidth() * 0.22f;
 
                     if (farEnough || fast) {
                         int toTab = currentTab + (lastDx < 0 ? 1 : -1);
