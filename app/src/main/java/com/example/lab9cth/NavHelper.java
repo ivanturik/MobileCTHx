@@ -35,13 +35,15 @@ public final class NavHelper {
     }
 
     public static void attachSwipeTabs(AppCompatActivity a, View touchArea, int currentTab) {
-        ViewGroup content = a.findViewById(android.R.id.content);
+        ViewGroup decor = (ViewGroup) a.getWindow().getDecorView();
+        ViewGroup content = decor.findViewById(android.R.id.content);
+
         View target = touchArea;
         if (target == null && content != null && content.getChildCount() > 0) {
             target = content.getChildAt(0);
         }
 
-        View touchSurface = content;
+        View touchSurface = decor;
 
         if (target != null && touchSurface != null) {
             touchSurface.setClickable(true);
@@ -139,7 +141,7 @@ public final class NavHelper {
                 dragging = false;
                 tracker = VelocityTracker.obtain();
                 tracker.addMovement(event);
-                return true;
+                return false;
             }
 
             if (tracker != null) tracker.addMovement(event);
@@ -153,9 +155,7 @@ public final class NavHelper {
                         if (canMove(dx)) {
                             dragging = true;
                             ViewParent parent = target.getParent();
-                            if (parent != null) {
-                                parent.requestDisallowInterceptTouchEvent(true);
-                            }
+                            if (parent != null) parent.requestDisallowInterceptTouchEvent(true);
                         }
                     }
                 }
@@ -163,9 +163,7 @@ public final class NavHelper {
                 if (dragging) {
                     dx = clampDirection(dx);
                     lastDx = dx;
-                    float translated = dx;
-
-                    target.setTranslationX(translated);
+                    target.setTranslationX(dx);
                     return true;
                 }
             }
@@ -180,12 +178,16 @@ public final class NavHelper {
                 }
 
                 if (dragging) {
-                    boolean fast = Math.abs(velocityX) > minFlingVelocity * 1.5f;
-                    boolean farEnough = Math.abs(lastDx) > target.getWidth() * 0.22f;
+                    boolean fast = Math.abs(velocityX) > minFlingVelocity * 1.2f;
+                    boolean farEnough = Math.abs(lastDx) > target.getWidth() * 0.15f;
 
                     if (farEnough || fast) {
                         int toTab = currentTab + (lastDx < 0 ? 1 : -1);
-                        animateAwayAndOpen(toTab, lastDx < 0);
+                        if (toTab >= TAB_CALC && toTab <= TAB_INFO) {
+                            animateAwayAndOpen(toTab, lastDx < 0);
+                        } else {
+                            resetPosition();
+                        }
                     } else {
                         resetPosition();
                     }
