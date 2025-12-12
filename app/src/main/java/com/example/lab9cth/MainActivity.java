@@ -83,6 +83,12 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        if (s.contains("-")) {
+            tvResult.setText("Отрицательные значения отключены. Включите модуль, чтобы считать |x|");
+            btnGraph.setVisibility(View.GONE);
+            return;
+        }
+
         double x;
         try {
             x = Double.parseDouble(s.replace(',', '.'));
