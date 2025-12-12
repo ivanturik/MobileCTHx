@@ -2,8 +2,6 @@ package com.example.lab9cth;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -21,8 +19,6 @@ import com.google.android.material.card.MaterialCardView;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-
-    private GestureDetector gestureDetector;
 
     private EditText etX;
     private TextView tvResult;
@@ -63,13 +59,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         });
 
-        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                return NavHelper.tryHandleHorizontalSwipe(MainActivity.this,
-                        NavHelper.TAB_CALC, e1, e2, velocityX, velocityY);
-            }
-        });
+        View root = findViewById(R.id.main);
+        NavHelper.attachSwipeTabs(this, root, NavHelper.TAB_CALC);
 
         MaterialCardView card = findViewById(R.id.cardMain);
         card.setScaleX(0.96f);
@@ -84,16 +75,16 @@ public class MainActivity extends AppCompatActivity {
                 .start();
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        gestureDetector.onTouchEvent(ev);
-        return super.dispatchTouchEvent(ev);
-    }
-
     private void calculate() {
         String s = etX.getText() == null ? "" : etX.getText().toString().trim();
         if (s.isEmpty()) {
             tvResult.setText("Введите x");
+            btnGraph.setVisibility(View.GONE);
+            return;
+        }
+
+        if (s.contains("-")) {
+            tvResult.setText("Отрицательные значения отключены. Включите модуль, чтобы считать |x|");
             btnGraph.setVisibility(View.GONE);
             return;
         }
@@ -112,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Условие из задания: 0 и отрицательные — недопустимы (если не предусмотрено)
         if (!useAbs && xForCalc <= 0) {
-            tvResult.setText("Недопустимый ввод данных: x должен быть > 0");
+            tvResult.setText("Недопустимый ввод данных: x должен быть > 0 (или включите модуль)");
             btnGraph.setVisibility(View.GONE);
             return;
         }
