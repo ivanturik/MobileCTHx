@@ -10,14 +10,16 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurface">
+        android:background="@android:color/transparent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbarHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:title="История"
-            app:titleCentered="true"/>
+            android:background="@android:color/transparent"
+            app:titleCentered="true"
+            app:titleTextColor="@color/white"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.card.MaterialCardView
@@ -67,6 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="12dp"
+            android:paddingBottom="96dp"
             android:clipToPadding="false"
             android:layoutAnimation="@anim/layout_fall_down"/>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
