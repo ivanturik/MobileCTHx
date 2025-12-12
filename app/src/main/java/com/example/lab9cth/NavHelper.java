@@ -34,19 +34,21 @@ public final class NavHelper {
     }
 
     public static void attachSwipeTabs(AppCompatActivity a, View touchArea, int currentTab) {
-        View root = touchArea;
-        if (root == null) {
+        View target = touchArea;
+        if (target == null) {
             View content = a.findViewById(android.R.id.content);
             if (content instanceof ViewGroup) {
-                root = ((ViewGroup) content).getChildAt(0);
+                target = ((ViewGroup) content).getChildAt(0);
             } else {
-                root = content;
+                target = content;
             }
         }
 
-        if (root != null) {
-            root.setClickable(true);
-            new SwipeController(a, root, currentTab);
+        View touchSurface = a.getWindow() == null ? null : a.getWindow().getDecorView();
+
+        if (target != null && touchSurface != null) {
+            touchSurface.setClickable(true);
+            new SwipeController(a, touchSurface, target, currentTab);
         }
     }
 
@@ -103,6 +105,7 @@ public final class NavHelper {
 
     private static final class SwipeController implements View.OnTouchListener {
         private final AppCompatActivity activity;
+        private final View touchSurface;
         private final View target;
         private final int currentTab;
 
@@ -115,8 +118,9 @@ public final class NavHelper {
         private boolean dragging;
         private VelocityTracker tracker;
 
-        SwipeController(AppCompatActivity activity, View target, int currentTab) {
+        SwipeController(AppCompatActivity activity, View touchSurface, View target, int currentTab) {
             this.activity = activity;
+            this.touchSurface = touchSurface;
             this.target = target;
             this.currentTab = currentTab;
 
@@ -124,7 +128,7 @@ public final class NavHelper {
             touchSlop = cfg.getScaledTouchSlop();
             minFlingVelocity = cfg.getScaledMinimumFlingVelocity();
 
-            target.setOnTouchListener(this);
+            touchSurface.setOnTouchListener(this);
         }
 
         @Override
@@ -151,7 +155,8 @@ public final class NavHelper {
                     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > touchSlop) {
                         if (canMove(dx)) {
                             dragging = true;
-                            target.getParent().requestDisallowInterceptTouchEvent(true);
+                            View parent = target.getParent() instanceof View ? (View) target.getParent() : target;
+                            parent.requestDisallowInterceptTouchEvent(true);
                         }
                     }
                 }
