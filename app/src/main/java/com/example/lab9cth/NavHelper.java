@@ -35,20 +35,18 @@ public final class NavHelper {
     }
 
     public static void attachSwipeTabs(AppCompatActivity a, View touchArea, int currentTab) {
+        ViewGroup content = a.findViewById(android.R.id.content);
         View target = touchArea;
-        if (target == null) {
-            View content = a.findViewById(android.R.id.content);
-            if (content instanceof ViewGroup) {
-                target = ((ViewGroup) content).getChildAt(0);
-            } else {
-                target = content;
-            }
+        if (target == null && content != null && content.getChildCount() > 0) {
+            target = content.getChildAt(0);
         }
 
-        View touchSurface = a.getWindow() == null ? null : a.getWindow().getDecorView();
+        View touchSurface = content;
 
         if (target != null && touchSurface != null) {
             touchSurface.setClickable(true);
+            touchSurface.setFocusable(true);
+            touchSurface.setFocusableInTouchMode(true);
             new SwipeController(a, touchSurface, target, currentTab);
         }
     }
@@ -106,7 +104,6 @@ public final class NavHelper {
 
     private static final class SwipeController implements View.OnTouchListener {
         private final AppCompatActivity activity;
-        private final View touchSurface;
         private final View target;
         private final int currentTab;
 
@@ -121,7 +118,6 @@ public final class NavHelper {
 
         SwipeController(AppCompatActivity activity, View touchSurface, View target, int currentTab) {
             this.activity = activity;
-            this.touchSurface = touchSurface;
             this.target = target;
             this.currentTab = currentTab;
 
@@ -167,12 +163,9 @@ public final class NavHelper {
                 if (dragging) {
                     dx = clampDirection(dx);
                     lastDx = dx;
-                    float translated = dx * 0.9f;
-                    float progress = Math.min(1f, Math.abs(translated) / Math.max(1, target.getWidth()));
+                    float translated = dx;
 
                     target.setTranslationX(translated);
-                    target.setScaleY(1f - 0.05f * progress);
-                    target.setAlpha(1f - 0.15f * progress);
                     return true;
                 }
             }
@@ -220,13 +213,10 @@ public final class NavHelper {
             float end = (toRight ? -1 : 1) * target.getWidth();
             target.animate()
                     .translationX(end)
-                    .alpha(0.5f)
-                    .setDuration(160)
+                    .setDuration(180)
                     .setInterpolator(new DecelerateInterpolator())
                     .withEndAction(() -> {
-                        target.setAlpha(1f);
                         target.setTranslationX(0f);
-                        target.setScaleY(1f);
                         openTab(activity, currentTab, toTab);
                     })
                     .start();
@@ -235,9 +225,7 @@ public final class NavHelper {
         private void resetPosition() {
             target.animate()
                     .translationX(0f)
-                    .scaleY(1f)
-                    .alpha(1f)
-                    .setDuration(180)
+                    .setDuration(200)
                     .setInterpolator(new DecelerateInterpolator())
                     .start();
         }
